@@ -1,27 +1,26 @@
 package com.test.orders_app.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
+@Table(name = "products")
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(length = 250)
     private String description;
 
-    @Column(nullable = false, length = 50)
     private String price;
 
-    @Column(name = "current_stock", nullable = false)
     private int currentStock;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 }
