@@ -11,12 +11,12 @@ import lombok.Data;
 public class Product {
     @Id
     @GeneratedValue
-    int id;
+    private Integer id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 250)
+    @Column
     private String description;
 
     @Column(nullable = false)
