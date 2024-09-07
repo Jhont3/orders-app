@@ -13,13 +13,13 @@ public class Product {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column
+    @Column(length = 250)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String price;
 
     @Column(name = "current_stock", nullable = false)
