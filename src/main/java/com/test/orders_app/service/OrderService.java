@@ -22,11 +22,8 @@ public class OrderService {
     }
 
     public OrderDTO createOrder(OrderDTO orderDTO) {
-
         Order orderToSave = orderDtoToOrder(orderDTO);
-
-        Integer productId = orderToSave.getProduct().getId();
-        Product product = productService.getProductById(productId);
+        Product product = productService.getProductById(orderToSave.getProductId());
         orderToSave.setProduct(product);
 
         Order savedOrder = orderRepository.save(orderToSave);
@@ -36,22 +33,15 @@ public class OrderService {
 
     public Order orderDtoToOrder(OrderDTO orderDTO){
         Order order = new Order();
-        Product product = new Product();
-
-        product.setId(orderDTO.getProduct_id());
-        order.setProduct(product);
         order.setId(orderDTO.getId());
-
+        order.setProductId(orderDTO.getProductId());
         return order;
     }
 
     public OrderDTO orderToOrderDto(Order order){
         OrderDTO orderDTO = new OrderDTO();
-
-        orderDTO.setProduct_id(order.getProduct().getId());
         orderDTO.setId(order.getId());
-
+        orderDTO.setProductId(order.getProductId());
         return orderDTO;
     }
-
 }

@@ -3,15 +3,22 @@ package com.test.orders_app.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @Table(name = "orders")
-public class Order {
+@IdClass(OrderPK.class)
+public class Order implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Id
+    @Column(name = "product_id", nullable = false)
+    private Integer productId;
+
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
 }
