@@ -1,5 +1,5 @@
 const apiBaseUrl = 'http://localhost:8080';
-const apiUrl = `${apiBaseUrl}/orders`;
+const getOrdersUrl = `${apiBaseUrl}/orders`;
 const getProductsUrl = `${apiBaseUrl}/products`;
 
 window.addEventListener('load', function () {
@@ -14,16 +14,21 @@ window.addEventListener('load', function () {
     const btnAddProduct = document.querySelector("#addProduct");
     const btnRemoveProduct = document.querySelector("#removeProduct");
     const btnCreateOrder = document.querySelector("#createOrder");
+    const ordersTableBody = document.querySelector("#ordersTableBody");
 
     let products = [];
+    let orders = [];
 
-    fetchApiGet(getProductsUrl);
+    fetchGetProducts(getProductsUrl);
+    fetchGetOrders(getOrdersUrl);
 
-    btnAddProduct.addEventListener('click', function () {
+    btnAddProduct.addEventListener('click', function (event) {
+        event.preventDefault();
         moveProducts(productListLeft, productListRight);
     });
 
-    btnRemoveProduct.addEventListener('click', function () {
+    btnRemoveProduct.addEventListener('click', function (event) {
+        event.preventDefault();
         moveProducts(productListRight, productListLeft);
     });
 
@@ -35,7 +40,7 @@ window.addEventListener('load', function () {
     function moveProducts(fromList, toList) {
         const selectedProducts = fromList.querySelectorAll("input[type='checkbox']:checked");
         selectedProducts.forEach(product => {
-            const parent = product.parentElement.parentElement;
+            const parent = product.parentElement;
             toList.appendChild(parent);
             product.checked = false;
         });
@@ -51,18 +56,29 @@ window.addEventListener('load', function () {
         // Get last orderID and + 1
         let lastOrderId = getLastOrderId() + 1;
 
+        const promises = [];
+
         selectedProducts.forEach(product => {
             const orderData = {
                 id: lastOrderId,
                 productId: parseInt(product.value)
             };
 
-            fetchApiPost(apiUrl, orderData);
+            //Add each post petition to promises
+            promises.push(fetchApiPost(getOrdersUrl, orderData));
         });
+
+        Promise.all(promises)
+            .then(() => {
+                fetchGetOrders(getOrdersUrl);
+            })
+            .catch(error => {
+                console.error('Something went wrong with the order creation:', error);
+            });
     }
 
     function getLastOrderId() {
-        const orderRows = document.querySelectorAll("#ordersTable tbody tr");
+        const orderRows = document.querySelectorAll("#ordersTableBody tr");
         if (orderRows.length === 0) return 0;
 
         const lastRow = orderRows[orderRows.length - 1];
@@ -79,7 +95,7 @@ window.addEventListener('load', function () {
             body: JSON.stringify(payload)
         };
 
-        fetch(url, configuraciones)
+        return fetch(url, configuraciones)
             .then(respuesta => respuesta.json())
             .then(data => {
                 console.log('Order created:', data);
@@ -87,7 +103,7 @@ window.addEventListener('load', function () {
             .catch(error => console.log('Something went wrong..:', error));
     }
 
-    function fetchApiGet(url) {
+    function fetchGetProducts(url) {
         fetch(url)
             .then(response => {
                 if (!response.ok) {
@@ -103,6 +119,29 @@ window.addEventListener('load', function () {
                     const li = document.createElement('li');
                     li.innerHTML = `<label>${product.name}</label><input type="checkbox" value="${product.id}" />`;
                     productListLeft.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Something went wrong:', error));
+    }
+
+    function fetchGetOrders(url) {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                orders = [...data];
+
+                ordersTableBody.innerHTML = "";
+
+                orders.forEach(order => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${order.id}</td><td>${order.product.name}</td><td>${order.product.price}</td>`;
+                    ordersTableBody.appendChild(tr);
                 });
             })
             .catch(error => console.error('Something went wrong:', error));
