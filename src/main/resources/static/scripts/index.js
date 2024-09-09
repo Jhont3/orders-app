@@ -58,7 +58,6 @@ window.addEventListener('load', function () {
             };
 
             fetchApiPost(apiUrl, orderData);
-            lastOrderId++; // Incrementar el ID de la orden para la siguiente
         });
     }
 
@@ -98,12 +97,11 @@ window.addEventListener('load', function () {
             })
             .then(data => {
                 console.log('Data received:', data);
-                products = [...data]; // Asegurarse de asignar los datos correctamente
+                products = [...data];
 
-                // Llenar la lista izquierda con productos después de recibir los datos
                 products.forEach(product => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<label>${product.name} <input type="checkbox" value="${product.id}" /></label>`;
+                    li.innerHTML = `<label>${product.name}</label><input type="checkbox" value="${product.id}" />`;
                     productListLeft.appendChild(li);
                 });
             })

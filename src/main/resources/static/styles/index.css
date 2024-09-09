@@ -10,44 +10,34 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-}
-
-header {
-    display: flex;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    box-shadow: 0px 3px 5px lightgrey;
-    padding: 0 3em;
-    margin-bottom: 2em;
+    box-sizing: border-box;
 }
 
 body {
     background-color: #F6F6F6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-button {
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-h1 {
-  color: #293241;
-  font-weight: 300;
-  margin: .5em 0;
+header {
+    width: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    box-shadow: 0px 3px 5px lightgrey;
+    padding: 1em 3em;
+    margin-bottom: 2em;
 }
 
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .user-info {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
     gap: 10px;
 }
 
@@ -58,6 +48,87 @@ h1 {
 
 .user-image img {
     object-fit: cover;
-    width: 50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+main {
+    width: 80%;
+    max-width: 900px;
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.products-selection {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2em;
+}
+
+.product-list-container {
+    width: 30%;
+    border: 1px solid lightgrey;
+    padding: 1em;
+    border-radius: 8px;
+    background-color: var(--app-grey);
+}
+
+.product-list {
+    list-style: none;
+}
+
+.product-list li{
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+}
+
+button {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--secondary);
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #84a9c0;
+}
+
+.order-button-container {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+.orders-table th,
+.orders-table td {
+    border: 1px solid #ddd;
+    padding: 0.75em;
+    text-align: left;
+}
+
+.orders-table th {
+    background-color: var(--primary);
+    color: #293241;
+}
+
+.orders-table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

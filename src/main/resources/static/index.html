@@ -8,8 +8,6 @@
   <title>OrdersApp</title>
 
   <link rel="stylesheet" href="/styles/index.css">
-
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/scripts/index.js" defer></script>
 
 </head>
@@ -31,22 +29,23 @@
 
 <main>
   <form class="form">
-    <!-- --------- Select how many products you are ordering ------------- -->
-    <div>
+    <!-- --------- Select how many products you are ordering section ------------- -->
+    <div class="products-selection">
 
-      <div>
-        <ul id="productListLeft">
+      <div class="product-list-container">
+        <ul id="productListLeft" class="product-list">
           <!-- Dinamic list -->
         </ul>
 
       </div>
 
-      <div>
+      <div class="buttons-container">
         <button id="addProduct">Add product(s)</button>
         <button id="removeProduct">Remove product(s)</button>
       </div>
-      <div>
-        <ul id="productListRight">
+
+      <div class="product-list-container">
+        <ul id="productListRight" class="product-list">
           <!-- Dinamic list -->
         </ul>
       </div>
@@ -54,13 +53,32 @@
     </div>
 
     <!-- --------- Create order button ------------- -->
-    <div>
+    <div class="order-button-container">
       <button id="createOrder" type="submit">
         Generate Order
       </button>
     </div>
 
   </form>
+
+  <table class="orders-table">
+    <thead>
+      <tr>
+        <th>Order No</th>
+        <th>Product Name</th>
+        <th>Product Price</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTableBody">
+    <!-- Dynamic rows -->
+    <tr>
+      <td>1</td>
+      <td>Product 1</td>
+      <td>100</td>
+    </tr>
+
+    </tbody>
+  </table>
 
 </main>
 
