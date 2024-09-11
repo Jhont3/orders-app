@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProductService {
@@ -27,4 +26,13 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFountException("The product with id " + id + " does not exist"));
     }
+
+    public List<Product> getProductsByOrderId(Integer orderId) throws ResourceNotFountException {
+        List<Product> products = productRepository.findByOrderId(orderId);
+        if (products.isEmpty()) {
+            throw new ResourceNotFountException("That order ID didn't have products");
+        }
+        return products;
+    }
+
 }

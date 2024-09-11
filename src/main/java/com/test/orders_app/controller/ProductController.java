@@ -4,9 +4,11 @@ import com.test.orders_app.exceptions.ResourceNotFountException;
 import com.test.orders_app.models.Product;
 import com.test.orders_app.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,6 +31,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> productSearch(@PathVariable("id") Integer id) throws ResourceNotFountException {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<Product>> listProducts(@RequestParam Integer orderId) throws ResourceNotFountException {
+        List<Product> products = productService.getProductsByOrderId(orderId);
+        return ResponseEntity.ok(products);
     }
 
 }
