@@ -18,7 +18,7 @@ public class OrderService {
     ProductService productService;
 
     public List<Order> getOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAllByOrderByIdDesc();
     }
 
     public OrderDTO createOrder(OrderDTO orderDTO) {

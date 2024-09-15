@@ -70,6 +70,7 @@ window.addEventListener('load', function () {
 
         Promise.all(promises)
             .then(() => {
+                console.log('All orders created successfully');
                 fetchGetOrders(getOrdersUrl);
             })
             .catch(error => {
@@ -81,8 +82,15 @@ window.addEventListener('load', function () {
         const orderRows = document.querySelectorAll("#ordersTableBody tr");
         if (orderRows.length === 0) return 0;
 
-        const lastRow = orderRows[orderRows.length - 1];
-        return parseInt(lastRow.cells[0].innerText);
+        let maxOrderId = 0;
+        orderRows.forEach(row => {
+            const currentId = parseInt(row.cells[0].innerText);
+            if (currentId > maxOrderId) {
+                maxOrderId = currentId;
+            }
+        });
+
+        return maxOrderId;
     }
 
     function fetchApiPost(url, payload) {
@@ -99,6 +107,7 @@ window.addEventListener('load', function () {
             .then(respuesta => respuesta.json())
             .then(data => {
                 console.log('Order created:', data);
+                return data;
             })
             .catch(error => console.log('Something went wrong..:', error));
     }
@@ -125,25 +134,30 @@ window.addEventListener('load', function () {
     }
 
     function fetchGetOrders(url) {
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok. Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data received:', data);
-                orders = [...data];
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok. Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data received:', data);
+            orders = [...data];
 
-                ordersTableBody.innerHTML = "";
+            ordersTableBody.innerHTML = "";
 
-                orders.forEach(order => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${order.id}</td><td>${order.product.name}</td><td>${order.product.price}</td>`;
-                    ordersTableBody.appendChild(tr);
-                });
-            })
-            .catch(error => console.error('Something went wrong:', error));
+            orders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${order.id}</td><td>${order.product.name}</td><td>${order.product.price}</td>`;
+                ordersTableBody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Something went wrong:', error));
     }
 });
